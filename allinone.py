@@ -1,23 +1,23 @@
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 from flaskext.mysql import MySQL
-#first commit para sa pag import ng mga modules
 
+#Code initializes Flask app and enables Cross-Origin Resource Sharing.
 app = Flask(__name__)
 CORS(app)
-#Code initializes Flask app and enables Cross-Origin Resource Sharing.
 
+#Configuring MySQL database connection for the app.
 app.config['MYSQL_DATABASE_HOST'] = 'localhost'
 app.config['MYSQL_DATABASE_USER'] = 'root'
 app.config['MYSQL_DATABASE_PASSWORD'] = 'mysqlrootpassword'
 app.config['MYSQL_DATABASE_DB'] = 'reservation_db'
-
 mysql = MySQL(app)
 
 #CREATE GUESTS FUNCTION
 @app.route('/create', methods=['POST'])
 def create_guests():
     try:
+        #Parsing JSON request into variables for guest data.
         _json = request.json
         _guest_id = _json['id']
         _guest_firstname = _json['firstname']
@@ -25,13 +25,16 @@ def create_guests():
         _guest_email = _json['email']
         _guest_phone = _json['phone']
 
+        #Checking valid inputs and establishing a database connection.
         if _guest_id and _guest_firstname and _guest_lastname and _guest_email and _guest_phone and request.method == 'POST':
             conn = mysql.connect()
             cursor = conn.cursor()
+        #Executing an SQL query to insert data into the database.
             sqlQuery = "INSERT INTO guests (id, firstname, lastname, email, phone) VALUES (%s, %s, %s, %s, %s)"
             bindData = (_guest_id, _guest_firstname, _guest_lastname, _guest_email, _guest_phone)
             cursor.execute(sqlQuery, bindData)
             conn.commit()
+        #Returning a JSON response indicating success or displaying an error.
             response = jsonify('Guest added successfully!')
             response.status_code = 200
             return response
