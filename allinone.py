@@ -43,6 +43,7 @@ def create_guests():
         cursor.close()
         conn.close()
 
+#ERROR HANDLER FUNCTION
 @app.errorhandler(404)
 def showMessage(error=None):
     message = {
