@@ -1,3 +1,5 @@
+#bagong add yung pymysql tsaka search function
+import pymysql
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 from flaskext.mysql import MySQL
@@ -130,6 +132,26 @@ def delete_guests(id):
         conn.commit()
         #Returns a response indicating successful deletion of the guest, or an error message if an exception occurs during the process.
         response = jsonify('Guest deleted successfully!')
+        response.status_code = 200
+        return response
+    except Exception as e:
+        print(e)
+    finally:
+        cursor.close()
+        conn.close()
+
+#Search function
+@app.route('/search', methods=['GET'])
+def search_guests():
+    try:
+        # Get the search parameters from the query string
+        search_query = request.args.get('query')
+        conn = mysql.connect()
+        cursor = conn.cursor()
+        # Perform the search query
+        cursor.execute("SELECT id, firstname, lastname, email, phone FROM guests WHERE firstname LIKE %s OR lastname LIKE %s", (f"%{search_query}%", f"%{search_query}%"))
+        guestsRows = cursor.fetchall()        
+        response = jsonify(guestsRows)
         response.status_code = 200
         return response
     except Exception as e:
