@@ -85,22 +85,29 @@ def guests_details(id):
         cursor.close()
         conn.close()
 
+#Updates guest information based on the provided ID.
 @app.route('/update/<int:id>', methods=['PUT'])
 def update_guests(id):
-    try:
+    try:    
+    #Extracts guest information from the JSON request body.
         _json = request.json
         _guest_firstname = _json['firstname']
         _guest_lastname = _json['lastname']
         _guest_email = _json['email']
         _guest_phone = _json['phone']
 
+
+        #Checks if all guest information is provided and the request method is PUT. /n
+        # Then establishes a connection to the database and creates a cursor object.
         if _guest_firstname and _guest_lastname and _guest_email and _guest_phone and request.method == 'PUT':
             conn = mysql.connect()
             cursor = conn.cursor()
+        #This code updates the guest's information in the database based on the provided values.
             sqlQuery = "UPDATE guests SET firstname = %s, lastname = %s, email = %s, phone = %s WHERE id = %s"
             bindData = (_guest_firstname, _guest_lastname, _guest_email, _guest_phone, id)
             cursor.execute(sqlQuery, bindData)
             conn.commit()
+        #Generates success response or error message for guest update operation.
             response = jsonify('Guest updated successfully!')
             response.status_code = 200
             return response
