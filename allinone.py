@@ -66,6 +66,22 @@ def guests():
         cursor.close()
         conn.close()
 
+@app.route('/guests/<int:id>', methods=['GET'])
+def guests_details(id):
+    try:
+        conn = mysql.connect()
+        cursor = conn.cursor()
+        cursor.execute("SELECT id, firstname, lastname, email, phone FROM guests WHERE id = %s", (id,))
+        guestsRow = cursor.fetchone()
+        response = jsonify(guestsRow)
+        response.status_code = 200
+        return response
+    except Exception as e:
+        print(e)
+    finally:
+        cursor.close()
+        conn.close()
+
 #ERROR HANDLER FUNCTION
 @app.errorhandler(404)
 def showMessage(error=None):
