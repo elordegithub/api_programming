@@ -66,13 +66,16 @@ def guests():
         cursor.close()
         conn.close()
 
+#Defines a route to fetch details of a guest by their ID.
 @app.route('/guests/<int:id>', methods=['GET'])
 def guests_details(id):
     try:
+    #Executes a SELECT query to retrieve guest details by ID.
         conn = mysql.connect()
         cursor = conn.cursor()
         cursor.execute("SELECT id, firstname, lastname, email, phone FROM guests WHERE id = %s", (id,))
         guestsRow = cursor.fetchone()
+    #Returns guest details as JSON response with status code 200.
         response = jsonify(guestsRow)
         response.status_code = 200
         return response
