@@ -55,7 +55,7 @@ def guests():
     try:
     #Connects to the database, executes a SELECT query, and retrieves all rows of the "guests" table.
         conn = mysql.connect()
-        cursor = conn.cursor()
+        cursor = conn.cursor(pymysql.cursors.DictCursor)
         cursor.execute("SELECT id, firstname, lastname, email, phone FROM guests")
         guestsRows = cursor.fetchall()
     #Returns a JSON response with the fetched "guestsRows" data.
@@ -74,7 +74,7 @@ def guests_details(id):
     try:
     #Executes a SELECT query to retrieve guest details by ID.
         conn = mysql.connect()
-        cursor = conn.cursor()
+        cursor = conn.cursor(pymysql.cursors.DictCursor)
         cursor.execute("SELECT id, firstname, lastname, email, phone FROM guests WHERE id = %s", (id,))
         guestsRow = cursor.fetchone()
     #Returns guest details as JSON response with status code 200.
@@ -97,7 +97,6 @@ def update_guests(id):
         _guest_lastname = _json['lastname']
         _guest_email = _json['email']
         _guest_phone = _json['phone']
-
 
         #Checks if all guest information is provided and the request method is PUT. /n
         # Then establishes a connection to the database and creates a cursor object.
@@ -147,7 +146,7 @@ def search_guests():
         # Get the search parameters from the query string
         search_query = request.args.get('query')
         conn = mysql.connect()
-        cursor = conn.cursor()
+        cursor = conn.cursor(pymysql.cursors.DictCursor)
         # Perform the search query
         cursor.execute("SELECT id, firstname, lastname, email, phone FROM guests WHERE firstname LIKE %s OR lastname LIKE %s", (f"%{search_query}%", f"%{search_query}%"))
         guestsRows = cursor.fetchall()        
