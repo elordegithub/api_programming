@@ -119,13 +119,16 @@ def update_guests(id):
         cursor.close()
         conn.close()
 
+#Handles the deletion of a guest with the specified ID.
 @app.route('/delete/<int:id>', methods=['DELETE'])
 def delete_guests(id):
     try:
+        #Deletes the guest with the specified ID from the database.
         conn = mysql.connect()
         cursor = conn.cursor()
         cursor.execute("DELETE FROM guests WHERE id = %s", (id,))
         conn.commit()
+        #Returns a response indicating successful deletion of the guest, or an error message if an exception occurs during the process.
         response = jsonify('Guest deleted successfully!')
         response.status_code = 200
         return response
