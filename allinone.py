@@ -85,6 +85,33 @@ def guests_details(id):
         cursor.close()
         conn.close()
 
+@app.route('/update/<int:id>', methods=['PUT'])
+def update_guests(id):
+    try:
+        _json = request.json
+        _guest_firstname = _json['firstname']
+        _guest_lastname = _json['lastname']
+        _guest_email = _json['email']
+        _guest_phone = _json['phone']
+
+        if _guest_firstname and _guest_lastname and _guest_email and _guest_phone and request.method == 'PUT':
+            conn = mysql.connect()
+            cursor = conn.cursor()
+            sqlQuery = "UPDATE guests SET firstname = %s, lastname = %s, email = %s, phone = %s WHERE id = %s"
+            bindData = (_guest_firstname, _guest_lastname, _guest_email, _guest_phone, id)
+            cursor.execute(sqlQuery, bindData)
+            conn.commit()
+            response = jsonify('Guest updated successfully!')
+            response.status_code = 200
+            return response
+        else:
+            return showMessage()
+    except Exception as e:
+        print(e)
+    finally:
+        cursor.close()
+        conn.close()
+
 #ERROR HANDLER FUNCTION
 @app.errorhandler(404)
 def showMessage(error=None):
