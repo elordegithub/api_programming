@@ -14,7 +14,7 @@ app.config['MYSQL_DATABASE_PASSWORD'] = 'mysqlrootpassword'
 app.config['MYSQL_DATABASE_DB'] = 'reservation_db'
 mysql = MySQL(app)
 
-#CREATE GUESTS FUNCTION
+#Handles creation of new guest records via a POST request.
 @app.route('/create', methods=['POST'])
 def create_guests():
     try:
@@ -156,7 +156,7 @@ def search_guests():
         cursor.close()
         conn.close()
 
-#ERROR HANDLER FUNCTION
+#Handles 404 error and displays a custom error message.
 @app.errorhandler(404)
 def showMessage(error=None):
     message = {
