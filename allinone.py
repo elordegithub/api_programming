@@ -1,4 +1,3 @@
-#bagong add yung pymysql tsaka search function
 import pymysql
 from flask import Flask, jsonify, request
 from flask_cors import CORS
@@ -48,7 +47,6 @@ def create_guests():
         cursor.close()
         conn.close()
 
-
 #Defines a route for accessing the "guests" resource.
 @app.route('/guests', methods=['GET'])
 def guests():
@@ -97,8 +95,7 @@ def update_guests(id):
         _guest_lastname = _json['lastname']
         _guest_email = _json['email']
         _guest_phone = _json['phone']
-
-        #Checks if all guest information is provided and the request method is PUT. /n
+        #Checks if all guest information is provided and the request method is PUT.
         # Then establishes a connection to the database and creates a cursor object.
         if _guest_firstname and _guest_lastname and _guest_email and _guest_phone and request.method == 'PUT':
             conn = mysql.connect()
