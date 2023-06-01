@@ -46,13 +46,17 @@ def create_guests():
         cursor.close()
         conn.close()
 
-@app.route('/guests')
+
+#Defines a route for accessing the "guests" resource.
+@app.route('/guests', methods=['GET'])
 def guests():
     try:
+    #Connects to the database, executes a SELECT query, and retrieves all rows of the "guests" table.
         conn = mysql.connect()
         cursor = conn.cursor()
         cursor.execute("SELECT id, firstname, lastname, email, phone FROM guests")
         guestsRows = cursor.fetchall()
+    #Returns a JSON response with the fetched "guestsRows" data.
         response = jsonify(guestsRows)
         response.status_code = 200
         return response
