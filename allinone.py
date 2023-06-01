@@ -119,6 +119,22 @@ def update_guests(id):
         cursor.close()
         conn.close()
 
+@app.route('/delete/<int:id>', methods=['DELETE'])
+def delete_guests(id):
+    try:
+        conn = mysql.connect()
+        cursor = conn.cursor()
+        cursor.execute("DELETE FROM guests WHERE id = %s", (id,))
+        conn.commit()
+        response = jsonify('Guest deleted successfully!')
+        response.status_code = 200
+        return response
+    except Exception as e:
+        print(e)
+    finally:
+        cursor.close()
+        conn.close()
+
 #ERROR HANDLER FUNCTION
 @app.errorhandler(404)
 def showMessage(error=None):
